@@ -1,0 +1,12 @@
+{
+  "name": "K8-Monitoring",
+  "version": "99.0.0",
+  "description": "K8-Monitoring",
+  "keywords": [
+    "k8s"
+  ],
+  "dependencies": {
+    "async": "2.1.4",
+    "underscore": "1.8.3"
+  }
+}
