@@ -59,7 +59,7 @@ var logMetrics = function() {
 			console.log(new Date().toString() + ' ERROR Error fetching nodes: '+err);
 			return setImmediate(function(){
 				return logMetrics();
-			}, 2000);
+			}, 5000);
 		} else {
 			var nodes = JSON.parse(resp).items;
 			return async.parallel(function(){
@@ -81,7 +81,9 @@ var logMetrics = function() {
 				});
 				return tasks;
 			}(), function(err, resp){
-
+				return setImmediate(function(){
+					return logMetrics();
+				}, 5000);
 			});
 		}
 	});
