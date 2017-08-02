@@ -1,7 +1,7 @@
 FROM ubuntu
 
 # Install Node.js
-RUN apt-get update && apt-get install -y curl
+RUN apt-get update && apt-get install -y curl && apt-get install -y wget
 
 RUN \
   cd /tmp && \
