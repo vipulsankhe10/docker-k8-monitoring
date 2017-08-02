@@ -38,7 +38,9 @@ var _GET = function(protocol, host, port, path, headers, done){
   });
 
   request.on('error', function(error){
-    return done('Error handling error', null);
+  	if(!error)
+  		error = 'Error sending request';
+    return done(error, null);
   });
 
   request.end();
