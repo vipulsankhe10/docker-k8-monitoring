@@ -4,6 +4,7 @@ var _     = require('underscore');
 var async = require('async');
 var https = require('https');
 var http  = require('http');
+var flat  = require('flat');
 
 var kubernetesProtocol = process.env['FALKONRY_K8_PROTOCOL'] || 'https';
 var kubernetesHost     = process.env['FALKONRY_K8_HOST'] || 'kubernetes';
@@ -71,7 +72,14 @@ var logMetrics = function() {
 								console.log(new Date().toString() + ' ERROR Error fetching metrics from node [' + nodeName + '] : '+err);
 							} else {
 								var obj = JSON.parse(resp);
-								console.log(JSON.stringify(obj));
+								var flattened_node_props = flat(obj.node);
+								console.log(JSON.stringify(flattened_node_props));
+								if(Array.isArray(obj.pods)) {
+									obj.pods.forEach(function(eachPod){
+										var flattened_pod_props = flat(eachPod);
+										console.log(JSON.stringify(flattened_pod_props));
+									});
+								}
 							}
 							return _cb(null, null);
 						});
