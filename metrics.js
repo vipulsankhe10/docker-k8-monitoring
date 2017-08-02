@@ -57,7 +57,7 @@ var logMetrics = function() {
 	return _GET(kubernetesProtocol, kubernetesHost, kubernetesPort, '/api/v1/nodes', headers, function(err, resp){
 		if(err) {
 			console.log(new Date().toString() + ' ERROR Error fetching nodes: '+err);
-			return setImmediate(function(){
+			return setTimeout(function(){
 				return logMetrics();
 			}, 10000);
 		} else {
@@ -81,7 +81,7 @@ var logMetrics = function() {
 				});
 				return tasks;
 			}(), function(err, resp){
-				return setImmediate(function(){
+				return setTimeout(function(){
 					return logMetrics();
 				}, 10000);
 			});
