@@ -70,7 +70,8 @@ var logMetrics = function() {
 							if(err) {
 								console.log(new Date().toString() + ' ERROR Error fetching metrics from node [' + nodeName + '] : '+err);
 							} else {
-								console.log(resp);
+								var obj = JSON.parse(resp);
+								console.log(JSON.stringify(obj));
 							}
 							return _cb(null, null);
 						});
