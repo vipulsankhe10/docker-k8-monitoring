@@ -8,6 +8,7 @@
   "dependencies": {
     "async": "2.1.4",
     "flat": "4.0.0",
+    "js-remove-property": "1.0.5",
     "underscore": "1.8.3"
   }
 }

@@ -1,10 +1,11 @@
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
-var _     = require('underscore');
-var async = require('async');
-var https = require('https');
-var http  = require('http');
-var flat  = require('flat');
+var _          = require('underscore');
+var async      = require('async');
+var https      = require('https');
+var http       = require('http');
+var flat       = require('flat');
+var jsRemover  = require('js-remove-property');
 
 var kubernetesProtocol = process.env['FALKONRY_K8_PROTOCOL'] || 'https';
 var kubernetesHost     = process.env['FALKONRY_K8_HOST'] || 'kubernetes';
@@ -72,11 +73,17 @@ var logMetrics = function() {
 								console.log(new Date().toString() + ' ERROR Error fetching metrics from node [' + nodeName + '] : '+err);
 							} else {
 								var obj = JSON.parse(resp);
+								//removing unwanted properties
+								['startTime', 'time', 'workingSetBytes', 'rssBytes', 'pageFaults', 'majorPageFaults', 'userDefinedMetrics', 'inodesFree', 'inodes', 'inodesUsed', 'txErrors', 'rxErrors', 'logs'].forEach(function(eachProp){
+									jsRemover(eachProp, obj);
+								});
 								var flattened_node_props = flat(obj.node);
+								flattened_node_props['time'] = new Date().toISOString();
 								console.log(JSON.stringify(flattened_node_props));
 								if(Array.isArray(obj.pods)) {
 									obj.pods.forEach(function(eachPod){
 										var flattened_pod_props = flat(eachPod);
+										flattened_pod_props['time'] = new Date().toISOString();
 										console.log(JSON.stringify(flattened_pod_props));
 									});
 								}
