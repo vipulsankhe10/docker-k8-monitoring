@@ -19,6 +19,8 @@ var _GET = function(protocol, host, port, path, headers, done){
     method: 'GET'
   };
 
+  protocol = (protocol === 'https' ? https : http);
+
   var request = protocol.request(options, function(response) {
     var result = '';
     var responseCode = response.statusCode;
