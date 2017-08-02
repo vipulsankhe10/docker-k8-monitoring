@@ -1,11 +1,7 @@
 FROM ubuntu
 
 # Install Node.js
-RUN apt-get update && apt-get install -y curl && apt-get install -y wget && apt-get install -y python
-
-RUN curl https://dl.google.com/dl/cloudsdk/channels/rapid/google-cloud-sdk.tar.gz -o gcloud.tar.gz && \
-  tar zxf gcloud.tar.gz && \
-  echo Y | ./google-cloud-sdk/install.sh
+RUN apt-get update && apt-get install -y curl
 
 RUN \
   cd /tmp && \
