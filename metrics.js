@@ -15,11 +15,12 @@ var _GET = function(protocol, host, port, path, headers, done){
     host: host,
     port: port,
     path: path,
-    headers: headers
+    headers: headers,
+    method: 'GET'
   };
 
-  var request = protocol.get(options, function(response) {
-    var result = "";
+  var request = protocol.request(options, function(response) {
+    var result = '';
     var responseCode = response.statusCode;
 
     response.on('data', function(data) {
@@ -28,25 +29,25 @@ var _GET = function(protocol, host, port, path, headers, done){
 
     response.on('end', function() {
       if(responseCode != 200){
-        if(result == "")
-          result = "Internal Server Error";
+        if(result == '')
+          result = 'Internal Server Error';
         return done(result, null);
       }else
         return done(false, result);
     });
   });
 
-  request.on("error", function(error){
-    return done("Error handling error", null);
+  request.on('error', function(error){
+    return done('Error handling error', null);
   });
 
   request.end();
 };
 
 var logMetrics = function() {
-	return _GET(kubernetesProtocol, kubernetesHost, kubernetesPort, "/api/v1/nodes", {"Content-Type": "application/json"}, function(err, resp){
+	return _GET(kubernetesProtocol, kubernetesHost, kubernetesPort, '/api/v1/nodes', {'Content-Type': 'application/json'}, function(err, resp){
 		if(err) {
-			console.log(new Date().toString() + " ERROR Error fetching nodes: "+err);
+			console.log(new Date().toString() + ' ERROR Error fetching nodes: '+err);
 			return setImmediate(function(){
 				return logMetrics();
 			}, 2000);
@@ -58,7 +59,7 @@ var logMetrics = function() {
 					return function(_cb) {
 						return _GET('http', nodeName, kubeletPort, '/stats/summary', {'Content-Type': 'application/json'}, function(err, resp){
 							if(err) {
-								console.log(new Date().toString() + " ERROR Error fetching metrics from node [" + nodeName + "] : "+err);
+								console.log(new Date().toString() + ' ERROR Error fetching metrics from node [' + nodeName + '] : '+err);
 							} else {
 								console.log(resp);
 							}
