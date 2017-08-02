@@ -1,3 +1,5 @@
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+
 var _     = require('underscore');
 var async = require('async');
 var https = require('https');
@@ -49,7 +51,10 @@ var _GET = function(protocol, host, port, path, headers, done){
 };
 
 var logMetrics = function() {
-	return _GET(kubernetesProtocol, kubernetesHost, kubernetesPort, '/api/v1/nodes', {'Content-Type': 'application/json'}, function(err, resp){
+	var headers = {'Content-Type': 'application/json'};
+	if(kubernetesToken)
+		headers['Authorization'] = 'Bearer '+kubernetesToken;
+	return _GET(kubernetesProtocol, kubernetesHost, kubernetesPort, '/api/v1/nodes', headers, function(err, resp){
 		if(err) {
 			console.log(new Date().toString() + ' ERROR Error fetching nodes: '+err);
 			return setImmediate(function(){
