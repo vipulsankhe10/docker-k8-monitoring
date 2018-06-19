@@ -72,23 +72,16 @@ var logMetrics = function() {
 							console.log(new Date().toString() + ' ERROR Error fetching metrics from node [' + nodeName + '] : '+err);
 						} else {		
 							var obj = JSON.parse(resp);
-
-				            ['startTime', 'time', 'workingSetBytes', 'rssBytes', 'pageFaults', 'majorPageFaults', 'userDefinedMetrics', 'inodesFree', 'inodes', 'inodesUsed', 'txErrors', 'rxErrors', 'logs'].forEach(function(eachProp){
-				              jsRemover(eachProp, obj);
-				            });
 				         	
 				         	var flattened_node_props = flat(obj.node);
-							flattened_node_props['time'] = new Date().toISOString();
 							flattened_node_props['logType'] = 'kube_stats';
-							console.log('\nNode Level: ');
 							console.log(JSON.stringify(flattened_node_props));
 
 							if(Array.isArray(obj.pods)) {
 								obj.pods.forEach(function(eachPod){
 									var flattened_pod_props = flat(eachPod);
-									flattened_pod_props['time'] = new Date().toISOString();
+									flattened_pod_props['nodeName'] = nodeName;
 									flattened_pod_props['logType'] = 'kube_stats';
-									console.log('\nPod Level: ');
 									console.log(JSON.stringify(flattened_pod_props));
 								});
 							}							   
