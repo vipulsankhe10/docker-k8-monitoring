@@ -10,8 +10,15 @@ var jsRemover  = require('js-remove-property');
 var kubernetesProtocol = process.env['FALKONRY_K8_PROTOCOL'] || 'https';
 var kubernetesHost     = process.env['FALKONRY_K8_HOST'] || 'kubernetes';
 var kubernetesPort     = parseInt(process.env['FALKONRY_K8_PORT'] || '443');
-var kubernetesToken    = process.env['FALKONRY_K8_TOKEN'] || null;
+var kubernetesToken    = null;
 var kubeletPort        = parseInt(process.env['FALKONRY_KUBELET_PORT'] || '10255');
+var metricsInterval    = parseInt(process.env['FALKONRY_METRICS_INTERVAL'] || '10000');
+
+if(fs.existsSync("/var/run/secrets/kubernetes.io/serviceaccount/token")) {
+  kubernetesToken = fs.readFileSync('/var/run/secrets/kubernetes.io/serviceaccount/token');
+} else{
+  kubernetesToken = process.env['FALKONRY_K8_TOKEN'];
+}
 
 var _GET = function(protocol, host, port, path, headers, done){
   var options = {
@@ -99,7 +106,7 @@ var logMetrics = function() {
 			}(), function(err, resp){
 				return setTimeout(function(){
 					return logMetrics();
-				}, 10000);
+				}, metricsInterval);
 			});
 		}
 	});
