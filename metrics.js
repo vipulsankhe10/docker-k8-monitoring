@@ -7,12 +7,12 @@ var http       = require('http');
 var flat       = require('flat');
 var jsRemover  = require('js-remove-property');
 
-var kubernetesProtocol = process.env['FALKONRY_K8_PROTOCOL'] || 'https';
-var kubernetesHost     = process.env['FALKONRY_K8_HOST'] || 'kubernetes';
-var kubernetesPort     = parseInt(process.env['FALKONRY_K8_PORT'] || '443');
+var kubernetesProtocol = process.env['FALKONRY_K8_PROTOCOL'];
+var kubernetesHost     = process.env['FALKONRY_K8_HOST'];
+var kubernetesPort     = parseInt(process.env['FALKONRY_K8_PORT']);
 var kubernetesToken    = null;
-var kubeletPort        = parseInt(process.env['FALKONRY_KUBELET_PORT'] || '10255');
-var metricsInterval    = parseInt(process.env['FALKONRY_METRICS_INTERVAL'] || '10000');
+var kubeletPort        = parseInt(process.env['FALKONRY_KUBELET_PORT']);
+var metricsInterval    = parseInt(process.env['FALKONRY_METRICS_INTERVAL']);
 
 if(fs.existsSync("/var/run/secrets/kubernetes.io/serviceaccount/token")) {
   kubernetesToken = fs.readFileSync('/var/run/secrets/kubernetes.io/serviceaccount/token');
